@@ -4,68 +4,68 @@
 # 27.11.2018
 #############################
 
-import turtle                    # import turtle library
+import turtle                    # import turtle library 標準のグラフィックスライブラリ
 import time
 
 
-wn = turtle.Screen()                      # define the turtle screen
-wn.bgcolor("black")                       # set the background colour
+wn = turtle.Screen()                      # スクリーンを定義
+wn.bgcolor("black")                       # バックグラウンドカラーを黒に設定
 wn.title("A Maze Solving Program")
-wn.setup(1300,700)                        # setup the dimensions of the working window
+wn.setup(1300,700)                        # 作業ウィンドウの大胃さを設定
 
-# declare system variables
+# システム変数の宣言
 start_x = 0
 start_y = 0
 end_x = 0
 end_y = 0
 
-# the five classes below are drawing turtle images to construct the maze.
+# 以下の5つのクラスは、迷路を構築する為にturtleを使った画像を描画する。
 
-# use white turtle to stamp out the maze
-class Maze(turtle.Turtle):               # define a Maze class
+# 白い壁を用意して、迷路を作成する。
+class Maze(turtle.Turtle):               # 迷路（Maze）クラスの定義
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.shape("square")            # the turtle shape
-        self.color("white")             # colour of the turtle
-        self.penup()                    # lift up the pen so it do not leave a trail
-        self.speed(0)                   # define the animation speed
+        self.shape("square")            # 形を"四角"で定義
+        self.color("white")             # 色を"白"で定義
+        self.penup()                    # 跡を残さないよう、ペンを持ち上げる
+        self.speed(0)                   # アニメーションの速度を"0"で定義
 
-# use green turtles to show the visited cells
-class Green(turtle.Turtle):               # code as above
+# 緑色のturtleを使用して、訪問したセルを表示する。
+class Green(turtle.Turtle):               # 上記のコードとほぼ同じ
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.shape("square")
-        self.color("green")
-        self.penup()
-        self.speed(0)
+        self.shape("square")            # 形を"四角"で定義
+        self.color("green")             # 色を"緑"で定義
+        self.penup()                    # 跡を残さないよう、ペンを持ち上げる
+        self.speed(0)                   # アニメーションの速度を"0"で定義
 
-# use blue turtle to show the frontier cells
-class Blue(turtle.Turtle):               # code as above
+# 青色のturtleを使用して、迷路で分岐した時の、未開拓なセルを表示する。
+class Blue(turtle.Turtle):               # 上記のコードとほぼ同じ
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.shape("square")
-        self.color("blue")
-        self.penup()
-        self.speed(0)
+        self.shape("square")            # 形を"四角"で定義
+        self.color("blue")              # 色を"青"で定義
+        self.penup()                    # 跡を残さないよう、ペンを持ち上げる
+        self.speed(0)                   # アニメーションの速度を"0"で定義
 
-# use the red turtle to represent the start position
-class Red(turtle.Turtle):                # code as above
+# 赤色のturtleを使用して、開始位置を表示する。
+class Red(turtle.Turtle):                # 上記のコードとほぼ同じ
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.shape("square")
-        self.color("red")
-        self.setheading(270)  # point turtle to point down
-        self.penup()
-        self.speed(0)
+        self.shape("square")            # 形を"四角"で定義
+        self.color("red")               # 色を"赤"で定義
+        self.setheading(270)            # 向きを"↓"で定義
+        self.penup()                    # 跡を残さないよう、ペンを持ち上げる
+        self.speed(0)                   # アニメーションの速度を"0"で定義
 
-# use the yellow turtle to represent the end position and the solution path
-class Yellow(turtle.Turtle):           # code as above
+# 黄色のturtleを使用して、ゴールの位置とスタートからゴールまでの計算結果の経路を表示する。
+class Yellow(turtle.Turtle):           # 上記のコードとほぼ同じ
     def __init__(self):
         turtle.Turtle.__init__(self)
-        self.shape("square")
-        self.color("yellow")
-        self.penup()
-        self.speed(0)
+        self.shape("square")            # 形を"四角"で定義
+        self.color("yellow")            # 色を"黄"で定義
+        self.penup()                    # 跡を残さないよう、ペンを持ち上げる
+        self.speed(0)                   # アニメーションの速度を"0"で定義
 
 grid4 = [
     "+++++++++++++++",
@@ -128,99 +128,109 @@ grid1 = [
 "++++++++++++++++++++++++++++++++++++++++++++++",
  ]
 
-# this function constructs the maze based on the grid type above
-def setup_maze(grid):                          # define a function called setup_maze
-    global start_x, start_y, end_x, end_y      # set up global variables for start and end locations
-    for y in range(len(grid)):                 # iterate through each line in the grid
-        for x in range(len(grid[y])):          # iterate through each character in the line
-            character = grid[y][x]             # assign the variable character to the y and x positions of the grid
-            screen_x = -588 + (x * 24)         # move to the x location on the screen staring at -288
-            screen_y = 288 - (y * 24)          # move to the y location of the screen starting at 288
+# この関数は、上記のグリッドタイプに基づいて迷路を構築する。
+def setup_maze(grid):                          # 迷路のセットアップという名前の関数を定義する。
+    global start_x, start_y, end_x, end_y      # 開始位置と終了位置のグローバル変数を設定する。
+    for y in range(len(grid)):                 # グリッド（格子状,方眼状）の各行を反復処理する。
+        for x in range(len(grid[y])):          # 行内の各文字を反復処理する。
+            character = grid[y][x]             # 各文字をグリッドのy位置（行）とx位置（列）に割り当てる。
+            screen_x = -588 + (x * 24)         # x（列）に対して-588つめて、実際の画面上のxの位置に移動する。
+            screen_y = 288 - (y * 24)          # y（行）に対して288つめて、実際の画面上のyの位置に移動する。
 
-            if character == "+":                   # if character contains a '+'
-                maze.goto(screen_x, screen_y)      # move pen to the x and y location and
-                maze.stamp()                       # stamp a copy of the white turtle on the screen
-                walls.append((screen_x, screen_y)) # add cell to the walls list
+            if character == "+":                   # もし、character（文字）が"+"である場合
+                # maze（迷路クラス）
+                maze.goto(screen_x, screen_y)      # ペンをcharacterのx,y（列,行）の位置に移動し
+                maze.stamp()                       # 画面上に白色の四角形の画像を描画する。
+                # walls 壁リスト
+                walls.append((screen_x, screen_y)) # 該当の座標（x,y）を壁のリストに追加する。
 
-            if character == " ":                    # if no character found
-                path.append((screen_x, screen_y))   # add to path list
+            if character == " ":                    # 文字が見つからない" "（半角スペース）の場合
+                # path 経路リスト
+                path.append((screen_x, screen_y))   # 該当の座標（x,y）を経路リストに追加する。
 
-            if character == "e":                    # if cell contains an 'e'
-                yellow.goto(screen_x, screen_y)     # move pen to the x and y location and
-                yellow.stamp()                      # stamp a copy of the yellow turtle on the screen
-                end_x, end_y = screen_x, screen_y   # assign end locations variables to end_x and end_y
-                path.append((screen_x, screen_y))   # add cell to the path list
+            if character == "e":                    # もし、該当の座標の文字が"e"である場合
+                # yellow 計算結果の経路とゴール位置のセルのクラス
+                yellow.goto(screen_x, screen_y)     # ペンをcharacterのx,y（列,行）の位置に移動し
+                yellow.stamp()                      # 画面上に黄色の四角形の画像を描画する。
+                end_x, end_y = screen_x, screen_y   # 終了（ゴール）位置（x,y）をend_xとend_yに割り当てる
+                # path 経路リスト
+                path.append((screen_x, screen_y))   # 経路リストに座標（x,y）を追加
 
-            if character == "s":                       # if cell contains a "s"
-                start_x, start_y = screen_x, screen_y  # assign start locations variables to start_x and start_y
-                red.goto(screen_x, screen_y)           # send red turtle to start position
+            if character == "s":                       # もし、該当の座標の文字が"s"である場合
+                start_x, start_y = screen_x, screen_y  # 開始位置（x,y）をstart_xとstart_yに割り当てる
+                # red 開始位置のクラス
+                red.goto(screen_x, screen_y)           # 赤色の四角形の画像を開始位置の座標に描画する。
 
 def search(x,y):
-    frontier.append((x, y))                            # add the x and y position to the frontier list
-    solution[x, y] = x, y                              # add x and y to the solution dictionary
-    while len(frontier) > 0:                           # loop until the frontier list is empty
-        time.sleep(0)                                  # change this value to make the animation go slower
-        current = (x,y)                                # current cell equals x and  y positions
+    frontier.append((x, y))                            # x,y座標をフロンティアリストに追加
+    solution[x, y] = x, y                              # x,y座標をソリューション辞書型に追加
+    while len(frontier) > 0:                           # フロンティアリストが空になるまで繰り返す
+        time.sleep(0)                                  # アニメーション速度の調整（値を上げると遅くなる）
+        current = (x,y)                                # 現在位置情報（x,y座標）を追加
 
-        if(x - 24, y) in path and (x - 24, y) not in visited:  # check left
-            cellleft = (x - 24, y)
-            solution[cellleft] = x, y  # backtracking routine [cell] is the previous cell. x, y is the current cell
-            blue.goto(cellleft)        # blue turtle goto the  cellleft position
-            blue.stamp()               # stamp a blue turtle on the maze
-            frontier.append(cellleft)  # add cellleft to the frontier list
 
-        if (x, y - 24) in path and (x, y - 24) not in visited:  # check down
+        # 左の座標が経路リスト（path）の中にある かつ 左の座標が探索済みでない（not in visited） 事を確認する
+        if(x - 24, y) in path and (x - 24, y) not in visited:  # 左の座標をチェックする（24で1マス、x座標を左:-）
+            cellleft = (x - 24, y)     # 左の座標をcellleftに代入
+            # solution[左のセルの座標] = 現在（移動前）のx,y座標（backRoute関数で戻る時に、終了位置のx,y座標から移動先が記録される形になる）
+            # 下のifの条件がtrueの場合、solutionが上書きされていく為、必ずフロンティアリストの末尾が最終更新になり、逆さに辿ると経路になる。
+            solution[cellleft] = x, y
+            blue.goto(cellleft)        # 左のセルに分岐先の未開拓（青）を描画する為に左の座標に照準を合わせる
+            blue.stamp()               # 左のセルに分岐先の未開拓（青い四角形）を描画する。
+            frontier.append(cellleft)  # 分岐先の未開拓の座標リスト（frontier）に追加する。
+
+        if (x, y - 24) in path and (x, y - 24) not in visited:  # 下の座標をチェックする（処理は上記とほぼ同じ）
             celldown = (x, y - 24)
             solution[celldown] = x, y  # backtracking routine [cell] is the previous cell. x, y is the current cell
             blue.goto(celldown)
             blue.stamp()
             frontier.append(celldown)
 
-        if(x + 24, y) in path and (x + 24, y) not in visited:   # check right
+        if(x + 24, y) in path and (x + 24, y) not in visited:   # 右の座標をチェックする（処理は上記とほぼ同じ）
             cellright = (x + 24, y)
             solution[cellright] = x, y  # backtracking routine [cell] is the previous cell. x, y is the current cell
             blue.goto(cellright)
             blue.stamp()
             frontier.append(cellright)
 
-        if(x, y + 24) in path and (x, y + 24) not in visited:  # check up
+        if(x, y + 24) in path and (x, y + 24) not in visited:  # 上の座標をチェックする（処理は上記とほぼ同じ）
             cellup = (x, y + 24)
             solution[cellup] = x, y  # backtracking routine [cell] is the previous cell. x, y is the current cell
             blue.goto(cellup)
             blue.stamp()
             frontier.append(cellup)
 
-        x, y = frontier.pop()           # remove last entry from the frontier list and assign to x and y
-        visited.append(current)         # add current cell to visited list
-        green.goto(x,y)                 # green turtle goto x and y position
-        green.stamp()                   # stamp a copy of the green turtle on the maze
-        if (x,y) == (end_x, end_y):     # makes sure the yellow end turtle is still visible after been visited
-            yellow.stamp()              # restamp the yellow turtle at the end position 
-        if (x,y) == (start_x, start_y): # makes sure the red start turtle is still visible after been visited
-            red.stamp()                 # restamp the red turtle at the start position 
+        x, y = frontier.pop()           # 迷路の分岐先の未開拓の座標リスト（frontier）から最後のエントリ（現在値に一番近い）を削除し、x,y座標に割り当てる
+        visited.append(current)         # 現在のx,y座標（frontierリストに移動した後）を訪問済みリストに追加する。
+        green.goto(x,y)                 # 訪問済みのセル（緑色の四角形）を描画する為、現在のx,y座標（frontierリストに移動した後）を合わせる。
+        green.stamp()                   # 現在のx,y座標（frontierリストに移動した後）に訪問済みのセル（緑色の四角形）を描画する。
+        if (x,y) == (end_x, end_y):     # もし、現在のx,y座標が終了位置（黄色の四角形）で描画されるべき場所だった場合
+            yellow.stamp()              # 終了位置の色（黄色の四角形）で塗り直す。
+        if (x,y) == (start_x, start_y): # もし、現在のx,y座標が開始位置（赤色の四角形）で描画されるべき場所だった場合
+            red.stamp()                 # 開始位置の色（赤色の四角形）で塗り直す。
 
-def backRoute(x, y):                       # this is the solution path function
-    yellow.goto(x, y)                      
-    yellow.stamp()
-    while (x, y) != (start_x, start_y):    # stop loop when current cells == start cell
-        yellow.goto(solution[x, y])        # move the yellow turtle to the key value of solution ()
-        yellow.stamp()                     # create solution path
-        x, y = solution[x, y]              # "key value" now becomes the new key
+def backRoute(x, y):                       # 探索結果の解を示す関数（終了位置から開始位置へ戻る）
+    yellow.goto(x, y)                      # 終了位置に移動し
+    yellow.stamp()                         # 黄色の四角形で塗りつぶす
+    while (x, y) != (start_x, start_y):    # 現在のx,y座標が開始位置のx,y座標と一致する場合、ループを停止する
+        yellow.goto(solution[x, y])        # solutionによって逆方向に辿りながら次のx,y座標を参照し
+        yellow.stamp()                     # 黄色い四角で塗りつぶす
+        x, y = solution[x, y]              # 辿った先（solution）をx,y座標に入れる
 
-#  initialise lists
-maze = Maze()
-red = Red()
-blue = Blue()
-green = Green()
-yellow = Yellow()
-walls = []
-path = []
-visited = []
-frontier = []
-solution = {}
+#  初期化リスト
+maze = Maze()           #迷路の壁を、白色で描画するクラス
+red = Red()             #開始位置を、赤色で描画するクラス
+blue = Blue()           #迷路の分岐の未開拓なセルを、青色で描画するクラス
+green = Green()         #訪問済みのセルを、緑色で描画するクラス
+yellow = Yellow()       #終了位置と、計算結果の経路を黄色で描画するクラス
+walls = []              #迷路の壁のリスト
+path = []               #迷路の道のリスト
+visited = []            #探索済みのセル座標のリスト
+frontier = []           #迷路の分岐の未開拓なセルのリスト
+solution = {}           #計算結果（辞書型、連想配列に近いもの）
 
-setup_maze(grid1)                       # call setup maze function
-search(start_x, start_y)                # call search function
-backRoute(end_x, end_y)                 # call backroute function
+setup_maze(grid1)                       # 迷路のセットアップ関数の呼び出し（迷路を作成し、壁、道、開始位置、終了位置を作成する）
+search(start_x, start_y)                # 迷路を探索する為の関数
+backRoute(end_x, end_y)                 # 終了位置から開始位置に戻る関数
 
-wn.exitonclick()                        # exit out Pygame when x is clicked
+wn.exitonclick()                        # クリックされた時、描画された画面（Pygame）を終了する。
